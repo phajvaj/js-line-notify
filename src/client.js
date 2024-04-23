@@ -27,7 +27,7 @@ class LineNotify {
         return {"Authorization" : `Bearer ${this.accessToken}`}
     }
 
-    sendMessage(message, image_path, sticker_id, package_id) {
+    async sendMessage(message, image_path, sticker_id, package_id) {
 
         var data = {"message" : message}
 
@@ -43,11 +43,11 @@ class LineNotify {
             var data = {...data, "stickerPackageId" : package_id, "stickerId" : sticker_id}
         }
 
-        return this._req(`${config.BASE_API_URL}${config.NOTIFY_API_QUERY_PATH}`, this.getHeaders(), data) 
+        return await this._req(`${config.BASE_API_URL}${config.NOTIFY_API_QUERY_PATH}`, this.getHeaders(), data) 
 
     }
 
-    sendText(message = config.DEFAULT_MESSAGE['TEXT']) {
+    async sendText(message = config.DEFAULT_MESSAGE['TEXT']) {
         /**
          * Example:
          *
@@ -56,11 +56,11 @@ class LineNotify {
          * :parameter message : string
          * :maximum character : 1000
          */   
-         return this.sendMessage(message, null, null, null)     
+         return await this.sendMessage(message, null, null, null)     
     }
 
 
-    sendImage(image_path = config.DEFAULT_MESSAGE['IMAGE'], 
+    async sendImage(image_path = config.DEFAULT_MESSAGE['IMAGE'], 
               message = config.DEFAULT_MESSAGE['TEXT']) {
         /**
          * Example:
@@ -72,10 +72,10 @@ class LineNotify {
          * :parameter image_path : string
          * 
          */
-        return this.sendMessage(message, image_path, null, null)
+        return await this.sendMessage(message, image_path, null, null)
     }
 
-    sendSticker(sticker_id = config.DEFAULT_MESSAGE['STICKER'][0], 
+    async sendSticker(sticker_id = config.DEFAULT_MESSAGE['STICKER'][0], 
                 package_id = config.DEFAULT_MESSAGE['STICKER'][1], 
                 message = config.DEFAULT_MESSAGE['TEXT']) {
         /**
@@ -88,15 +88,15 @@ class LineNotify {
          * :parameter package_id : integer
          */
 
-        return this.sendMessage(message, null, sticker_id, package_id);
+        return await this.sendMessage(message, null, sticker_id, package_id);
     }
 
-    status() {
-        return this._req(`${config.BASE_API_URL}${config.STATUS_API_URL_QUERY_PATH}`, this.getHeaders())
+    async status() {
+        return await this._req(`${config.BASE_API_URL}${config.STATUS_API_URL_QUERY_PATH}`, this.getHeaders())
     }
 
-    revoke() {
-        return this._req(`${config.BASE_API_URL}${config.REVOKE_API_URL_QUERY_PATH}`, this.getHeaders())
+    async revoke() {
+        return await this._req(`${config.BASE_API_URL}${config.REVOKE_API_URL_QUERY_PATH}`, this.getHeaders())
     }
 
     async _req(uri, headers, data) {
