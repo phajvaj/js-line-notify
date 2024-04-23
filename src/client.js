@@ -99,9 +99,9 @@ class LineNotify {
         return this._req(`${config.BASE_API_URL}${config.REVOKE_API_URL_QUERY_PATH}`, this.getHeaders())
     }
 
-    _req(uri, headers, data) {
+    async _req(uri, headers, data) {
         const method = uri.split("/")[4] === "status" ? "GET" : "POST";
-        request({
+        return await request({
             method   : method,
             url      : uri,
             resolveWithFullResponse: true,
@@ -114,10 +114,12 @@ class LineNotify {
              * if you want see api-rate-limit, you can use :
              * console.log(header)
              */
-            console.log(JSON.parse(res.body));
+            //console.log(JSON.parse(res.body));
+            return JSON.parse(res.body);
         })
         .catch(err => {
-            console.log(JSON.parse(err.error));
+            // console.log(JSON.parse(err.error));
+            return JSON.parse(err.error);
         })
     }
 }
